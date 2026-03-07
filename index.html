@@ -43,8 +43,9 @@
                   class="py-2 pr-42 pl-4 rounded-md shadow-md border border-white"
                   type="text"
                   name=""
-                  id=""
+                  id="input-admin"
                   maxlength="5"
+                  value="admin"
                   placeholder="Enter Username"
                 />
                 <p class="mt-2 text-[#4A00FF]">Default: admin</p>
@@ -57,7 +58,7 @@
                   class="py-2 pr-42 pl-4 rounded-md shadow-md border border-white"
                   type="text"
                   name=""
-                  id=""
+                  id="input-pin"
                   maxlength="8"
                   placeholder="Enter Password"
                 />
@@ -66,7 +67,7 @@
             </div>
           </div>
           <div class="ml-5">
-            <button class="btn btn-primary mt-4 px-52 py-6 rounded-xl hover:bg-[#4A00FF] text-[18px]">
+            <button id="sign-in-btn" class="btn btn-primary mt-4 px-52 py-6 rounded-xl hover:bg-[#4A00FF] text-[18px]">
               Sign In
             </button>
           </div>
@@ -85,5 +86,8 @@
         </div>
       </section>
     </main>
+
+    <!-- script -->
+     <script src="./script/login.js"></script>
   </body>
 </html>

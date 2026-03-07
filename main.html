@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main-Page</title>
+  </head>
+  <!-- Tailwind and Daisyui -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/daisyui@5"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- Google Font  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * {
+      font-family: "Geist", sans-serif;
+    }
+  </style>
+  <body>
+    <!-- Navbar-section -->
+    <section class="bg-bage-100 shadow py-4">
+      <nav class="flex justify-between">
+        <div class="flex items-center gap-2 ml-20">
+          <img class="w-10" src="./assets/github-logo.png" alt="" />
+          <h1 class="text-2xl font-semibold">GitHub Issues Tracker</h1>
+        </div>
+        <div class="join mr-10">
+          <div>
+            <label class="input validator join-item">
+              <input type="email" placeholder="Search issues..." required />
+            </label>
+          </div>
+          <button class="btn btn-primary join-item">
+            <img src="./assets/plus.png" alt="" /> New Issue
+          </button>
+        </div>
+      </nav>
+    </section>
+    <!-- main-section -->
+    <!-- button-section -->
+    <main class="container mx-auto mt-10">
+      <div class="flex gap-4 bg-white shadow py-4 pl-2">
+        <button onclick="toggleStyle('all-btn')" id="all-btn" class="btn btn-primary px-8">All</button>
+        <button onclick="toggleStyle('open-btn')" id="open-btn" class="btn btn-outline px-8">Open</button>
+        <button onclick="toggleStyle('closed-btn')" id="closed-btn" class="btn btn-outline px-8">Closed</button>
+      </div>
+
+      <div id="issues-count" class="bg-white shadow py-5 mt-10 ">
+        
+      </div>
+
+      <div id="issues-container" class="grid grid-cols-4 gap-5 mt-6"></div>
+    </main>
+
+    <!-- script -->
+    <script src="./script/main.js"></script>
+     <!-- <script src="./script/taxt.js"></script> -->
+  </body>
+</html>
