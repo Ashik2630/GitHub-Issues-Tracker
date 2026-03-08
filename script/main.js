@@ -2,6 +2,7 @@ let allIssues = [];
 let currentStatus = "all-btn";
 
 const loadIssues = () =>
+  manageSpinner(true);
   fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
     .then((res) => res.json())
     .then((data) => {
@@ -16,21 +17,6 @@ const issuesDetails = async (id) => {
     const details = await res.json();
     displayDetails(details.data)
 }
-
-// {
-//     "id": 10,
-//     "title": "Update dependencies to latest versions",
-//     "description": "Several npm packages are outdated and have security vulnerabilities. Need to update and test.",
-//     "status": "closed",
-//     "labels": [
-//         "documentation"
-//     ],
-//     "priority": "medium",
-//     "author": "security_sam",
-//     "assignee": "john_doe",
-//     "createdAt": "2024-01-05T14:00:00Z",
-//     "updatedAt": "2024-01-15T11:30:00Z"
-// }
 
 const displayDetails = (issue) => {
   
@@ -75,6 +61,18 @@ const displayDetails = (issue) => {
    `
 
   document.getElementById("issues_modal").showModal();
+}
+
+
+const manageSpinner = (status) => {
+  if(status === true){
+    document.getElementById('spinner').classList.remove("hidden")
+    document.getElementById('issues-container').classList.add("hidden")
+  }
+  else{
+    document.getElementById('issues-container').classList.remove("hidden")
+    document.getElementById('spinner').classList.add("hidden")
+  }
 }
 
 const displayIssues = (issues) => {
@@ -166,6 +164,7 @@ const displayIssues = (issues) => {
         `;
     issuesContainer.appendChild(cardDiv);
   });
+  manageSpinner(false);
 };
 
 document.getElementById("all-btn").addEventListener("click", () => {
@@ -203,5 +202,8 @@ function toggleStyle(id) {
   selected.classList.remove("btn-outline");
   selected.classList.add("btn-primary");
 }
+
+
+
 
 loadIssues();
