@@ -48,20 +48,81 @@
     <!-- button-section -->
     <main class="container mx-auto mt-10">
       <div class="flex gap-4 bg-white shadow py-4 pl-2">
-        <button onclick="toggleStyle('all-btn')" id="all-btn" class="btn btn-primary px-8">All</button>
-        <button onclick="toggleStyle('open-btn')" id="open-btn" class="btn btn-outline px-8">Open</button>
-        <button onclick="toggleStyle('closed-btn')" id="closed-btn" class="btn btn-outline px-8">Closed</button>
+        <button
+          onclick="toggleStyle('all-btn')"
+          id="all-btn"
+          class="btn btn-primary px-8"
+        >
+          All
+        </button>
+        <button
+          onclick="toggleStyle('open-btn')"
+          id="open-btn"
+          class="btn btn-outline px-8"
+        >
+          Open
+        </button>
+        <button
+          onclick="toggleStyle('closed-btn')"
+          id="closed-btn"
+          class="btn btn-outline px-8"
+        >
+          Closed
+        </button>
       </div>
 
-      <div id="issues-count" class="bg-white shadow py-5 mt-10 ">
-        
+      <div id="issues-count" class="bg-white shadow py-10 mt-10">
+        <div class="flex justify-between">
+          <div class="flex gap-5">
+            <img
+              id="all-img"
+              class="ml-10"
+              src="./assets/Aperture.png"
+              alt=""
+            />
+            <div class="flex justify-between">
+              <div>
+                <h1><span id="count">0</span> Issues</h1>
+                <p>Track and manage your project issues</p>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-6 text-sm mr-5">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+              <span class="text-gray-700">Open</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 bg-purple-500 rounded-full"></span>
+              <span class="text-gray-700">Closed</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="issues-container" class="grid grid-cols-4 gap-5 mt-6"></div>
     </main>
 
+    <div class="card card-border bg-base-100 w-96">
+          <div class="card-body">
+            <div class="flex justify-between">
+              <img src="./assets/Open-Status.png" alt="">
+              <p class="bg-[#FEECEC] text-[#c73939] ml-56 text-center rounded-md">HIGH</p>
+            </div>
+            <h2 class="card-title">issue.title</h2>
+            <p>
+              A card component has a figure, a body part, and inside body there
+              are title and actions parts
+            </p>
+            <div class="flex gap-5">
+              <span> Bug</span>
+              <p>help wanted</p>
+            </div>
+          </div>
+        </div>
+
     <!-- script -->
     <script src="./script/main.js"></script>
-     <!-- <script src="./script/taxt.js"></script> -->
   </body>
 </html>
