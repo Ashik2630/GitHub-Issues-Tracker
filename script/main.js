@@ -65,6 +65,8 @@ const displayDetails = (issue) => {
 
 
 const manageSpinner = (status) => {
+  const spinner =  document.getElementById("spinner");
+  spinner.innerHTML = `<div> <span class="loading loading-spinner loading-xl"></span></div>`
   if(status === true){
     document.getElementById('spinner').classList.remove("hidden")
     document.getElementById('issues-container').classList.add("hidden")
@@ -88,7 +90,8 @@ const displayIssues = (issues) => {
     const date = new Date(issue.createdAt).toLocaleDateString();
     cardDiv.innerHTML = ` 
        <div 
-      class="max-w-sm h-full rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden font-sans ml-5 md:ml-0"
+      class="max-w-sm h-full rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden font-sans ml-5 md:ml-0
+      hover:"
     > 
       <!-- Top Color Bar -->
       <div class="h-1 ${
@@ -143,14 +146,14 @@ const displayIssues = (issues) => {
             class="inline-flex items-center gap-1.5 bg-red-50 text-red-500 text-xs font-bold px-3 py-1.5 rounded-full border border-red-100"
           >
             <i class="fa-solid fa-bug"></i>
-            BUG
+            ${issue.labels[0]}
           </span>
 
           <span
             class="inline-flex items-center gap-1.5 bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full border border-orange-100"
           >
             <i class="fa-solid fa-circle-question"></i>
-            HELP WANTED
+            ${issue.labels[1]}
           </span>
         </div>
       </div>
@@ -173,6 +176,7 @@ document.getElementById("all-btn").addEventListener("click", () => {
 });
 
 document.getElementById("open-btn").addEventListener("click", () => {
+  manageSpinner(true)
   const openIssues = allIssues.filter((issue) => issue.status === "open");
   displayIssues(openIssues);
   document.getElementById("all-img").src = "./assets/Open-Status.png";
@@ -203,7 +207,16 @@ function toggleStyle(id) {
   selected.classList.add("btn-primary");
 }
 
-
-
-
 loadIssues();
+
+document.getElementById("btn-search").addEventListener("click", () => {
+  const input = document.getElementById("input-search");
+  const searchValue = input.value.trim();
+
+  fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchValue}`)
+    .then(res => res.json())
+    .then(data => {
+      // console.log(data.data);
+      displayIssues(data.data); 
+    });
+});
