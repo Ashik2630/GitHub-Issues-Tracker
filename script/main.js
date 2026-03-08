@@ -22,7 +22,7 @@ const displayIssues = (issues) => {
     const date = new Date(issue.createdAt).toLocaleDateString();
     cardDiv.innerHTML = ` 
        <div
-      class="max-w-sm h-full rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden font-sans"
+      class="max-w-sm h-full rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden font-sans ml-5 md:ml-0"
     > 
       <!-- Top Color Bar -->
       <div class="h-1 ${
@@ -40,7 +40,7 @@ const displayIssues = (issues) => {
                 src="${
                   issue.status === "open"
                     ? "./assets/Open-Status.png"
-                    : "./assets/Closed- Status .png"
+                    : "./assets/Closed-Status .png"
                 }"
                 alt="status"
               />
@@ -114,7 +114,7 @@ document.getElementById("open-btn").addEventListener("click", () => {
 document.getElementById("closed-btn").addEventListener("click", () => {
   const closedIssues = allIssues.filter((issue) => issue.status === "closed");
   displayIssues(closedIssues);
-  document.getElementById("all-img").src = "./assets/Closed- Status .png";
+  document.getElementById("all-img").src = "./assets/Closed-Status .png";
 });
 
 const allBtn = document.getElementById("all-btn");
