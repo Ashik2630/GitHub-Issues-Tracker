@@ -9,6 +9,74 @@ const loadIssues = () =>
       displayIssues(allIssues);
     });
 
+
+const issuesDetails = async (id) => {
+    const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
+    const res = await fetch(url);
+    const details = await res.json();
+    displayDetails(details.data)
+}
+
+// {
+//     "id": 10,
+//     "title": "Update dependencies to latest versions",
+//     "description": "Several npm packages are outdated and have security vulnerabilities. Need to update and test.",
+//     "status": "closed",
+//     "labels": [
+//         "documentation"
+//     ],
+//     "priority": "medium",
+//     "author": "security_sam",
+//     "assignee": "john_doe",
+//     "createdAt": "2024-01-05T14:00:00Z",
+//     "updatedAt": "2024-01-15T11:30:00Z"
+// }
+
+const displayDetails = (issue) => {
+  
+  console.log(issue)
+  const issueDetails =  document.getElementById('details-container');
+   const date = new Date(issue.createdAt).toLocaleDateString();
+  issueDetails.innerHTML = `
+  <div class="main bg-white space-y-5">
+        <h1 class="text-2xl font-bold ">${issue.title}</h1>
+        <div class="flex gap-5 ">
+          <p class="bg-[#00A96E] px-2 py-1 rounded-full text-white">Opened</p>
+          <li class="ml-2">Opened by ${issue.assignee} </li>
+          <li class="ml-2">${date}</li>
+        </div>
+        <div class="flex gap-2 ">
+          <span
+            class="inline-flex items-center gap-1.5 bg-red-50 text-red-500 text-xs font-bold px-3 py-1.5 rounded-full border border-red-100"
+          >
+            <i class="fa-solid fa-bug"></i>
+            BUG
+          </span>
+
+          <span
+            class="inline-flex items-center gap-1.5 bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full border border-orange-100"
+          >
+            <i class="fa-solid fa-circle-question"></i>
+            HELP WANTED
+          </span>
+        </div>
+        <p >The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.</p>
+        <div class="bg-[#64748b23] flex gap-20 px-5">
+          <div class="left">
+            <span class="text-[18px] ">Assignee:</span> <br>
+          <h1 class="text-xl font-bold">${issue.assignee}</h1>
+          </div>
+          <div class="right"> 
+            <span class="text-[18px] ">Priority:</span>
+            <p class="bg-[#EF4444] text-white text-center rounded-full">High</p>
+          </div>
+        </div>
+    </div>
+   `
+
+  document.getElementById("issues_modal").showModal();
+}
+
 const displayIssues = (issues) => {
   // console.log(issues)
   const issuesContainer = document.getElementById("issues-container");
@@ -21,7 +89,7 @@ const displayIssues = (issues) => {
     // cardDiv.className ="btn btn-primary"
     const date = new Date(issue.createdAt).toLocaleDateString();
     cardDiv.innerHTML = ` 
-       <div
+       <div 
       class="max-w-sm h-full rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden font-sans ml-5 md:ml-0"
     > 
       <!-- Top Color Bar -->
@@ -62,7 +130,7 @@ const displayIssues = (issues) => {
         </div>
 
         <!-- Title -->
-        <h3 class="text-gray-800 font-bold text-lg leading-tight mb-2">
+        <h3 onclick="issuesDetails(${issue.id})" class="text-gray-800 font-bold text-lg leading-tight mb-2 cursor-pointer">
           ${issue.title}
         </h3>
 
