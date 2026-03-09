@@ -1,16 +1,6 @@
 let allIssues = [];
 let currentStatus = "all-btn";
 
-// const loadIssues = () =>
-//   manageSpinner(true);
-//     fetch("").then((res) => res.json()).then((data) => {
-//     console.log(data.data)
-//     const totalIssues = data.data;
-//     allIssues = totalIssues;
-//     // displayIssues(allIssues);
-//     return totalIssues;
-//   });
-
   const loadIssues = async () => {
     manageSpinner(true)
     const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
@@ -19,8 +9,6 @@ let currentStatus = "all-btn";
     allIssues = totalIssues;
     return totalIssues;
   }
-
-  
 
 const issuesDetails = async (id) => {
   const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
@@ -63,7 +51,7 @@ const displayDetails = (issue) => {
                icon = `<img src="./assets/help.png" class="w-4 h-4"/>`;
              }
              if (label === "documentation") {
-               color = "bg-[#eeeff2] text-[#9CA3AF] border border-[#eeeff2]";
+               color = "bg-[#baa24136] text-[#baa141] border border-[#eeeff2]";
                icon = `<i class="fa-brands fa-readme"></i>`;
              }
 
@@ -113,21 +101,21 @@ const manageSpinner = (status) => {
 };
 
 const displayIssues = (issues) => {
-  console.log(issues)
   const issuesContainer = document.getElementById("issues-container");
   issuesContainer.innerHTML = "";
   document.getElementById("count").innerText = issues.length;
 
-  //   console.log(issuesCount);
+
   issues.forEach((issue) => {
     const cardDiv = document.createElement("div");
-    // cardDiv.className ="btn btn-primary"
+
     const date = new Date(issue.createdAt).toLocaleDateString();
     cardDiv.innerHTML = ` 
        <div 
-      class="max-w-[400px] h-full rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden font-sans ml-5 md:ml-0
-      "
-    > 
+      class="max-w-[400px] h-full rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden font-sans ml-5 md:ml-0 hover:scale-102 hover:-translate-y-2 transition-all duration-400 cursor-pointer rounded-t-1g 
+      "> 
+     
+      
       <!-- Top Color Bar -->
       <div class="h-1 ${
         issue.status === "open" ? "bg-emerald-500" : "bg-[#A855F7]"
@@ -176,7 +164,7 @@ const displayIssues = (issues) => {
         </p>
 
       <!-- Tags -->
-        <div class="flex gap-2">
+        <div class="flex gap-2 mb-3">
          ${issue.labels
            .map((label) => {
              let color = "";
@@ -197,7 +185,7 @@ const displayIssues = (issues) => {
                icon = `<img src="./assets/help.png" class="w-4 h-4"/>`;
              }
              if (label === "documentation") {
-               color = "bg-[#eeeff2] text-[#9CA3AF] border border-[#eeeff2]";
+               color = "bg-[#baa24136] text-[#baa141] border border-[#eeeff2]";
                icon = `<i class="fa-brands fa-readme"></i>`;
              }
 
@@ -271,7 +259,7 @@ function toggleStyle(id) {
   selected.classList.add("btn-primary");
 }
 
-// displayIssues(loadIssues());
+
 loadIssues().then(res => {
   displayIssues(res);
 })
