@@ -1,28 +1,38 @@
 let allIssues = [];
 let currentStatus = "all-btn";
 
-const loadIssues = () =>
-  manageSpinner(true);
-  fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
-    .then((res) => res.json())
-    .then((data) => {
-      allIssues = data.data;
-      displayIssues(allIssues);
-    });
+// const loadIssues = () =>
+//   manageSpinner(true);
+//     fetch("").then((res) => res.json()).then((data) => {
+//     console.log(data.data)
+//     const totalIssues = data.data;
+//     allIssues = totalIssues;
+//     // displayIssues(allIssues);
+//     return totalIssues;
+//   });
 
+  const loadIssues = async () => {
+    manageSpinner(true)
+    const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
+    const data = await res.json();
+    const totalIssues = data.data;
+    allIssues = totalIssues;
+    return totalIssues;
+  }
+
+  
 
 const issuesDetails = async (id) => {
-    const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
-    const res = await fetch(url);
-    const details = await res.json();
-    displayDetails(details.data)
-}
+  const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
+  const res = await fetch(url);
+  const details = await res.json();
+  displayDetails(details.data);
+};
 
 const displayDetails = (issue) => {
-  
-  console.log(issue)
-  const issueDetails =  document.getElementById('details-container');
-   const date = new Date(issue.createdAt).toLocaleDateString();
+  console.log(issue);
+  const issueDetails = document.getElementById("details-container");
+  const date = new Date(issue.createdAt).toLocaleDateString();
   issueDetails.innerHTML = `
   <div class="main bg-white space-y-5">
         <h1 class="text-2xl font-bold ">${issue.title}</h1>
@@ -31,26 +41,53 @@ const displayDetails = (issue) => {
           <li class="ml-2">Opened by ${issue.assignee} </li>
           <li class="ml-2">${date}</li>
         </div>
-        <div class="flex gap-2 ">
-          <span
-            class="inline-flex items-center gap-1.5 bg-red-50 text-red-500 text-xs font-bold px-3 py-1.5 rounded-full border border-red-100"
-          >
-            <i class="fa-solid fa-bug"></i>
-            BUG
-          </span>
+         <!-- Tags -->
+        <div class="flex gap-2">
+         ${issue.labels
+           .map((label) => {
+             let color = "";
+             let icon = "";
 
-          <span
-            class="inline-flex items-center gap-1.5 bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full border border-orange-100"
-          >
-            <i class="fa-solid fa-circle-question"></i>
-            HELP WANTED
-          </span>
+             if (label === "bug") {
+               color = "bg-red-50 text-red-500";
+               icon = `<i class="fa-solid fa-bug"></i>`;
+             }
+
+             if (label === "enhancement") {
+               color = "bg-[#defce8] text-[#00A96E]";
+               icon = `<img src="./assets/Sparkle.png" class="w-4 h-4"/>`;
+             }
+
+             if (label === "help wanted") {
+               color = "bg-[#f2ebd0] text-[#D97706] border border-[#fde68a]";
+               icon = `<img src="./assets/help.png" class="w-4 h-4"/>`;
+             }
+             if (label === "documentation") {
+               color = "bg-[#eeeff2] text-[#9CA3AF] border border-[#eeeff2]";
+               icon = `<i class="fa-brands fa-readme"></i>`;
+             }
+
+             if (label === "good first issue") {
+               color = "bg-[#eeeff2] text-[#9CA3AF] border border-[#eeeff2]";
+               icon = `<i class="fa-solid fa-thumbs-up"></i>`;
+             }
+
+             return `
+            <span class="inline-flex items-center gap-1.5 ${color} text-[14px] font-bold px-3 py-1.5 rounded-full">
+              ${icon}
+              ${label}
+            </span>
+                `;
+           })
+           .join("")}
         </div>
         <p >The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.</p>
         <div class="bg-[#64748b23] flex gap-20 px-5">
           <div class="left">
             <span class="text-[18px] ">Assignee:</span> <br>
-          <h1 class="text-xl font-bold">${issue.assignee}</h1>
+          <h1 class="text-xl font-bold">
+              ${issue.assignee || "No Assignee"}
+          </h1>
           </div>
           <div class="right"> 
             <span class="text-[18px] ">Priority:</span>
@@ -58,27 +95,25 @@ const displayDetails = (issue) => {
           </div>
         </div>
     </div>
-   `
+   `;
 
   document.getElementById("issues_modal").showModal();
-}
-
+};
 
 const manageSpinner = (status) => {
-  const spinner =  document.getElementById("spinner");
-  spinner.innerHTML = `<div> <span class="loading loading-spinner loading-xl"></span></div>`
-  if(status === true){
-    document.getElementById('spinner').classList.remove("hidden")
-    document.getElementById('issues-container').classList.add("hidden")
+  const spinner = document.getElementById("spinner");
+  spinner.innerHTML = `<div> <span class="loading loading-spinner loading-xl"></span></div>`;
+  if (status === true) {
+    document.getElementById("spinner").classList.remove("hidden");
+    document.getElementById("issues-container").classList.add("hidden");
+  } else {
+    document.getElementById("issues-container").classList.remove("hidden");
+    document.getElementById("spinner").classList.add("hidden");
   }
-  else{
-    document.getElementById('issues-container').classList.remove("hidden")
-    document.getElementById('spinner').classList.add("hidden")
-  }
-}
+};
 
 const displayIssues = (issues) => {
-  // console.log(issues)
+  console.log(issues)
   const issuesContainer = document.getElementById("issues-container");
   issuesContainer.innerHTML = "";
   document.getElementById("count").innerText = issues.length;
@@ -90,8 +125,8 @@ const displayIssues = (issues) => {
     const date = new Date(issue.createdAt).toLocaleDateString();
     cardDiv.innerHTML = ` 
        <div 
-      class="max-w-sm h-full rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden font-sans ml-5 md:ml-0
-      hover:"
+      class="max-w-[400px] h-full rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden font-sans ml-5 md:ml-0
+      "
     > 
       <!-- Top Color Bar -->
       <div class="h-1 ${
@@ -122,8 +157,8 @@ const displayIssues = (issues) => {
               issue.priority === "high"
                 ? "bg-red-50 text-red-400"
                 : issue.priority === "medium"
-                  ? "bg-yellow-50 text-yellow-400"
-                  : "bg-[#9CA3AF] text-[#ced9ec]"
+                  ? "bg-[#fff6d1] text-[#F59E0B]"
+                  : "bg-[#eeeff2] text-[#9CA3AF]"
             } text-xs font-bold px-4 py-1.5 rounded-full tracking-wide"
           >
             ${issue.priority}
@@ -140,24 +175,46 @@ const displayIssues = (issues) => {
           ${issue.description}
         </p>
 
-        <!-- Tags -->
+      <!-- Tags -->
         <div class="flex gap-2">
-          <span
-            class="inline-flex items-center gap-1.5 bg-red-50 text-red-500 text-xs font-bold px-3 py-1.5 rounded-full border border-red-100"
-          >
-            <i class="fa-solid fa-bug"></i>
-            ${issue.labels[0]}
-          </span>
+         ${issue.labels
+           .map((label) => {
+             let color = "";
+             let icon = "";
 
-          <span
-            class="inline-flex items-center gap-1.5 bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full border border-orange-100"
-          >
-            <i class="fa-solid fa-circle-question"></i>
-            ${issue.labels[1]}
-          </span>
+             if (label === "bug") {
+               color = "bg-red-50 text-red-500";
+               icon = `<i class="fa-solid fa-bug"></i>`;
+             }
+
+             if (label === "enhancement") {
+               color = "bg-[#defce8] text-[#00A96E]";
+               icon = `<img src="./assets/Sparkle.png" class="w-4 h-4"/>`;
+             }
+
+             if (label === "help wanted") {
+               color = "bg-[#f2ebd0] text-[#D97706] border border-[#fde68a]";
+               icon = `<img src="./assets/help.png" class="w-4 h-4"/>`;
+             }
+             if (label === "documentation") {
+               color = "bg-[#eeeff2] text-[#9CA3AF] border border-[#eeeff2]";
+               icon = `<i class="fa-brands fa-readme"></i>`;
+             }
+
+             if (label === "good first issue") {
+               color = "bg-[#eeeff2] text-[#9CA3AF] border border-[#eeeff2]";
+               icon = `<i class="fa-solid fa-thumbs-up"></i>`;
+             }
+
+             return `
+            <span class="inline-flex items-center gap-1.5 ${color} text-[14px] font-bold px-3 py-1.5 rounded-full">
+              ${icon}
+              ${label}
+            </span>
+                `;
+           })
+           .join("")}
         </div>
-      </div>
-
       <!-- Footer -->
       <div class="border-t border-gray-100 p-5 pt-4">
         <p class="text-slate-500 text-sm">#1 by ${issue.author}</p>
@@ -171,21 +228,28 @@ const displayIssues = (issues) => {
 };
 
 document.getElementById("all-btn").addEventListener("click", () => {
-  displayIssues(allIssues);
-  document.getElementById("all-img").src = "./assets/Aperture.png";
+  loadIssues().then(res => {
+    document.getElementById("all-img").src = "./assets/Aperture.png";
+    displayIssues(res)
+  })
 });
 
 document.getElementById("open-btn").addEventListener("click", () => {
-  manageSpinner(true)
-  const openIssues = allIssues.filter((issue) => issue.status === "open");
+  loadIssues().then(res => {
+    const openIssues = res.filter((issue) => issue.status === "open");
   displayIssues(openIssues);
   document.getElementById("all-img").src = "./assets/Open-Status.png";
+  })
+  
 });
 
 document.getElementById("closed-btn").addEventListener("click", () => {
-  const closedIssues = allIssues.filter((issue) => issue.status === "closed");
+   loadIssues().then(res => {
+    const closedIssues = res.filter((issue) => issue.status === "closed");
   displayIssues(closedIssues);
   document.getElementById("all-img").src = "./assets/Closed-Status .png";
+  })
+  
 });
 
 const allBtn = document.getElementById("all-btn");
@@ -207,16 +271,21 @@ function toggleStyle(id) {
   selected.classList.add("btn-primary");
 }
 
-loadIssues();
+// displayIssues(loadIssues());
+loadIssues().then(res => {
+  displayIssues(res);
+})
 
 document.getElementById("btn-search").addEventListener("click", () => {
   const input = document.getElementById("input-search");
   const searchValue = input.value.trim();
 
-  fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchValue}`)
-    .then(res => res.json())
-    .then(data => {
+  fetch(
+    `https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchValue}`,
+  )
+    .then((res) => res.json())
+    .then((data) => {
       // console.log(data.data);
-      displayIssues(data.data); 
+      displayIssues(data.data);
     });
 });
